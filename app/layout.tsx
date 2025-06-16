@@ -5,8 +5,8 @@ import Footer from "@/components/Footer";
 
 
 export const metadata: Metadata = {
-  title: "cancer free org",
-  description: "Tyme & Tide Resturant ui/ux app for engineers",
+  title: "Evergrow Gadgets",
+  description: "Evergrow Gadgets website",
 };
 
 export default function RootLayout({
