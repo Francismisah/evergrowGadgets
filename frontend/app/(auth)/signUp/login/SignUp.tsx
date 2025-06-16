@@ -1,5 +1,4 @@
 "use client";
-import React, { useState } from "react";
 import Button from "./Button";
 import Image from "next/image";
 import Link from "next/link";
