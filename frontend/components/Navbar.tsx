@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className="flexCenter flexBetween px-6 flex items-center gap-24 bg-white rounded-full lg:border-2 lg:border-red-500 py-2">
         {" "}
         <Link href="/" className="flex items-center justify-center">
-          <Image src="/logos.png" alt="logo" width={40} height={40} />
+          <Image src="/logos.png" alt="logo" width={60} height={60} />
         </Link>
         <ul className="hidden h-full gap-12 lg:flex">
           {NAV_LINKS.map((link) => (
