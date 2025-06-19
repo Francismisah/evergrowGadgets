@@ -5,5 +5,9 @@ export default function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main>{children}</main>;
+  return (
+    // Only the main content (children) will be rendered here,
+    // effectively excluding the Navbar and Footer for auth pages.
+    <main>{children}</main>
+  );
 }

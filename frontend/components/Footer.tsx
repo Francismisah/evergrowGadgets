@@ -14,7 +14,7 @@ const Footer = () => {
       >
         <div className="flex flex-col items-star justify-center gap-[10%] md:flex-row">
           <Link href="/" className="flex items-center justify-center">
-            <Image src="/logos.png" alt="logo" width={60} height={60} />
+            <Image src="/logos.png" alt="logo" width={160} height={160} />
           </Link>
           <div className="flex flex-wrap gap-10 sm:justify-between md:flex-1">
             {FOOTER_LINKS.map((columns) => (

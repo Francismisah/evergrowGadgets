@@ -15,8 +15,8 @@ const Navbar = () => {
     <nav className="max-container padding-container   mx-auto fixed top-6 right-0 left-0 z-[1000] justify-between">
       <div className="flexCenter flexBetween px-6 flex items-center gap-24 bg-white rounded-full lg:border-2 lg:border-red-500 py-2">
         {" "}
-        <Link href="/" className="flex items-center justify-center">
-          <Image src="/logos.png" alt="logo" width={60} height={60} />
+        <Link href="/" className="flex items-center justify-center  ml-3">
+          <Image src="/logos.png" alt="logo" width={110} height={80} />
         </Link>
         <ul className="hidden h-full gap-12 lg:flex">
           {NAV_LINKS.map((link) => (
@@ -34,7 +34,7 @@ const Navbar = () => {
           <Link href="/signUp">
             <Button
               type="button"
-              title="Sign Up/In"
+              title="Sign Up"
               icon="/user.svg"
               variant="btn_green"
             />

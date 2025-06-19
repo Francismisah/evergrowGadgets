@@ -22,16 +22,12 @@ export const FOOTER_LINKS = [
   {
     title: "Learn More",
     links: [
-      "About ExposeCancer",
+      "About Evergrow Gadgets",
       "Press Releases",
       "Environment",
       "Privacy Policy",
       "Contact Us",
     ],
-  },
-  {
-    title: "Our Community",
-    links: ["Movement", "Support group", "consulatations"],
   },
 ];
 
