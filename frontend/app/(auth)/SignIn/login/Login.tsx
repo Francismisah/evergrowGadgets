@@ -12,7 +12,10 @@ const Login = () => {
       <div className="bg-white rounded-2xl shadow-xl flex max-w-5xl lg:w-full overflow-hidden">
         {/* Left Column - Login Form */}
         <div className="lg:w-1/2 p-12 flex flex-col justify-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-8">
+          <Link href="/">
+            <Image src="/logos.png" alt="logo" width={100} height={100} />
+          </Link>
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Welcome back!
             <span role="img" aria-label="waving hand">
               👋
@@ -24,7 +27,7 @@ const Login = () => {
             type="button"
             title="Log in with Apple"
             icon="/apple.png"
-            variant="w-full bg-black border border-gray-300 rounded-xl py-4 flex items-center justify-center gap-2 mb-4 font-semibold text-gray-800 hover:bg-gray-50 transition-colors"
+            variant="w-full bg-black border text-white  border-gray-300 rounded-xl py-4 flex items-center justify-center gap-2 mb-4 font-semibold text-gray-800 hover:bg-gray-50 transition-colors"
           />
           <Button
             type="button"

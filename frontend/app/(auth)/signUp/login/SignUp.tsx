@@ -1,5 +1,4 @@
 "use client";
-import React, { useState } from "react";
 import Button from "./Button";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +11,9 @@ const signUp = () => {
       <div className="bg-white rounded-2xl shadow-xl flex max-w-5xl lg:w-full overflow-hidden">
         {/* Left Column - Login Form */}
         <div className="lg:w-1/2 md:lg:w-1/2 p-12 flex flex-col justify-center">
+          <Link href="/">
+            <Image src="/logos.png" alt="logo" width={100} height={100} />
+          </Link>
           <h1 className="text-5xl font-bold text-gray-900 mb-8">
             Welcome{" "}
             <span role="img" aria-label="waving hand">
@@ -24,7 +26,7 @@ const signUp = () => {
             type="button"
             title="Log in with Apple"
             icon="/apple.png"
-            variant="w-full bg-black border border-gray-300 rounded-xl py-4 flex items-center justify-center gap-2 mb-4 font-semibold text-gray-800 hover:bg-gray-50 transition-colors"
+            variant="w-full bg-black text-white border border-gray-300 rounded-xl py-4 flex items-center justify-center gap-2 mb-4 font-semibold text-gray-800 hover:bg-gray-50 transition-colors"
           />
           <Button
             type="button"
