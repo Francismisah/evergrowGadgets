@@ -14,8 +14,16 @@ export default function AccountsPage() {
     | "settings"
   >("details");
 
-  const handleSidebarItemClick = (item: string) => {
-    setActiveSidebarItem(item as any); // Cast for simplicity, handle properly in a larger app
+  const handleSidebarItemClick = (
+    item:
+      | "details"
+      | "addressBook"
+      | "orders"
+      | "newsletters"
+      | "dashBoard"
+      | "settings"
+  ) => {
+    setActiveSidebarItem(item); // No more 'as any' needed!
     // In a real app, you'd likely use React Router or similar to change views
     // For now, we'll just show the "My Details" form as it's the only one implemented.
   };

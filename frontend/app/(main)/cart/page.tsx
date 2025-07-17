@@ -24,19 +24,23 @@ const CartPage: React.FC = () => {
   >(undefined);
   const [totalAmountToPay, setTotalAmountToPay] = useState<number>(0);
   // New state to control displaying the order approved page
-  const [showOrderApprovedPage, setShowOrderApprovedPage] = useState<boolean>(false);
+  const [showOrderApprovedPage, setShowOrderApprovedPage] =
+    useState<boolean>(false);
 
   const { getCartTotal, cart, clearCart } = useCart(); // Assuming clearCart exists in your context
 
   const subtotal = getCartTotal();
 
-  const disableProceedToPayment = !confirmedDeliveryAddress || cart.length === 0;
+  const disableProceedToPayment =
+    !confirmedDeliveryAddress || cart.length === 0;
 
-  const handleProceedToCheckout = () => {
-    console.log(
-      "Please fill in your delivery details in the Shipping Details section."
-    );
-  };
+  // The 'handleProceedToCheckout' function was defined but never used.
+  // It has been removed to resolve the ESLint error.
+  // The logic for preventing proceeding to payment when conditions are not met
+  // is already handled by 'disableProceedToPayment' and the checks within
+  // 'handleOpenPaymentModalFromSummary'.
+  // If this function had a specific intended use, it should be re-added and called
+  // from a relevant UI element (e.g., a button's onClick handler).
 
   const handleOpenPaymentModalFromSummary = (finalAmount: number) => {
     if (confirmedDeliveryAddress && cart.length > 0) {
@@ -49,6 +53,7 @@ const CartPage: React.FC = () => {
     } else {
       // Replaced alert with a more user-friendly message if you have a custom modal system
       // For now, keeping alert as per original code, but consider replacing it.
+      // IMPORTANT: Avoid using alert() in production apps, use custom modals instead.
       alert(
         "Please confirm your delivery address and ensure your cart is not empty before proceeding to payment."
       );
@@ -59,16 +64,16 @@ const CartPage: React.FC = () => {
   const handleBackFromPaymentModal = () => setIsPaymentModalOpen(false);
 
   // This is the new handler for the *final* submission of the CardPaymentForm
-  const handleCardPaymentFinalSubmit = (details: CardDetails, deliveryInfo: ShippingAddress) => {
-    console.log(
-      "Final Card Payment submitted to backend (mock):",
-      {
-        paymentMethod: "Card",
-        cardDetails: details,
-        deliveryInfo: deliveryInfo,
-        totalAmount: totalAmountToPay.toFixed(2),
-      }
-    );
+  const handleCardPaymentFinalSubmit = (
+    details: CardDetails,
+    deliveryInfo: ShippingAddress
+  ) => {
+    console.log("Final Card Payment submitted to backend (mock):", {
+      paymentMethod: "Card",
+      cardDetails: details,
+      deliveryInfo: deliveryInfo,
+      totalAmount: totalAmountToPay.toFixed(2),
+    });
     // Simulate sending data to backend
     // In a real application, you would make an API call here.
     // Example: await fetch('/api/process-card-payment', { method: 'POST', body: JSON.stringify(...) });
@@ -140,11 +145,17 @@ const CartPage: React.FC = () => {
               <h3 className="font-semibold mb-4 text-green-800">
                 Confirmed Delivery Address:
               </h3>
-              <p className="regular-16 text-gray-50 my-2">{confirmedDeliveryAddress.homeAddress}</p>
+              <p className="regular-16 text-gray-50 my-2">
+                {confirmedDeliveryAddress.homeAddress}
+              </p>
               <p className="regular-16 text-gray-50 my-2">
                 {confirmedDeliveryAddress.lga}, {confirmedDeliveryAddress.state}
               </p>
-              <p className="regular-14 text-gray-50 my-2"> <span className="medium-16"> Phone:</span> {confirmedDeliveryAddress.phoneNumber}</p>
+              <p className="regular-14 text-gray-50 my-2">
+                {" "}
+                <span className="medium-16"> Phone:</span>{" "}
+                {confirmedDeliveryAddress.phoneNumber}
+              </p>
             </div>
           )}
 

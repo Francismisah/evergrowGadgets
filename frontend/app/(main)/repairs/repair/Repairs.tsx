@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useState, useRef, ChangeEvent } from "react";
 
 const Repairs: React.FC = () => {
@@ -113,7 +114,7 @@ rounded-b-lg lg:rounded-5xl   padding-container  md:flex-col
             {imagePreviewUrl && (
               <div className="mt-4 flex items-center space-x-4">
                 <div className="relative w-32 h-32 border border-gray-300 rounded-md overflow-hidden flex items-center justify-center bg-gray-100">
-                  <img
+                  <Image
                     src={imagePreviewUrl}
                     alt="Image Preview"
                     className="max-w-full max-h-full object-contain"

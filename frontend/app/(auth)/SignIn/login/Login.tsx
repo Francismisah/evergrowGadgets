@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Button from "./Button";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +13,7 @@ interface LoginProps {
   onSubmit: (details: LoginDetails) => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onSubmit }) => {
+const Login: React.FC<LoginProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFormValid, setIsFormValid] = useState<boolean>(false);

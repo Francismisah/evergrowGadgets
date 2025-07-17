@@ -5,10 +5,9 @@ import { useRouter } from "next/navigation"; // For redirection in App Router
 import Image from "next/image";
 import Link from "next/link";
 import Button from "./Button"; // Assuming your Button component
+import React from "react"; // Add this import for React.FormEvent
 
 // Define the GraphQL mutation for signup
-// Corrected based on backend errors: now expects firstName and lastName,
-// and no longer accepts phoneNumber or address for signup.
 const SIGNUP_MUTATION = `
   mutation SignupUser(
     $firstName: String!,
@@ -32,13 +31,10 @@ const SIGNUP_MUTATION = `
 const SignUp = () => {
   const router = useRouter(); // Initialize router for navigation
 
-  // State for form inputs - updated to firstName and lastName
+  // State for form inputs
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  // Removed address and phoneNumber states as they are not accepted by signup mutation
-  // If you need them for other purposes (e.g., user profile after signup), keep them
-  // but ensure they are not sent in this specific signup mutation.
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState(""); // State for role selection
@@ -51,6 +47,14 @@ const SignUp = () => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Define a type for GraphQL errors for better type safety
+  interface GraphQLError {
+    message: string;
+    locations?: { line: number; column: number }[];
+    path?: string[];
+    extensions?: Record<string, unknown>; // Using 'unknown' for extensions property values
+  }
+
   // Function to handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Prevent default form submission
@@ -58,7 +62,7 @@ const SignUp = () => {
     setMessage(null); // Clear previous messages
     setLoading(true); // Set loading state
 
-    // Basic client-side validation - updated for firstName and lastName
+    // Basic client-side validation
     if (
       !firstName ||
       !lastName ||
@@ -113,12 +117,11 @@ const SignUp = () => {
         body: JSON.stringify({
           query: SIGNUP_MUTATION,
           variables: {
-            firstName: firstName, // Sending firstName
-            lastName: lastName, // Sending lastName
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             password: password,
-            role: role, // Send the selected role
-            // phoneNumber and address are removed from variables as per backend error
+            role: role,
           },
         }),
       });
@@ -127,9 +130,11 @@ const SignUp = () => {
 
       if (result.errors) {
         console.error("GraphQL Signup Error:", result.errors);
+        // Corrected line 131: Explicitly type `err` in the map function
         const errorMessageText =
-          result.errors.map((err: any) => err.message).join(", ") ||
-          "An unknown error occurred during signup.";
+          (result.errors as GraphQLError[]) // Assert result.errors as an array of GraphQLError
+            .map((err: GraphQLError) => err.message)
+            .join(", ") || "An unknown error occurred during signup.";
         setMessage({
           text: `Signup failed: ${errorMessageText}`,
           type: "error",
@@ -154,13 +159,14 @@ const SignUp = () => {
           type: "error",
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) { // Corrected line 157: Use 'unknown' for catch block errors
       console.error("Network or parsing error during signup:", error);
+      let errorMessage = "Please check your internet connection and try again.";
+      if (error instanceof Error) { // Narrow the type if it's an Error instance
+        errorMessage = error.message;
+      }
       setMessage({
-        text: `An error occurred: ${
-          error.message ||
-          "Please check your internet connection and try again."
-        }`,
+        text: `An error occurred: ${errorMessage}`,
         type: "error",
       });
     } finally {
@@ -248,16 +254,12 @@ const SignUp = () => {
               />
               <Image
                 src="/mail.svg"
-                width={20} // Adjust width for smaller icon
-                height={20} // Adjust height for smaller icon
+                width={20}
+                height={20}
                 alt="Mail icon"
                 className="h-5 w-5 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
               />
             </div>
-
-            {/* Removed Address and Phone Number inputs as per backend schema */}
-            {/* If these fields are needed for user profile after signup, they should be handled separately
-                or your backend's signup mutation needs to be updated to accept them. */}
 
             {/* Password */}
             <div className="relative">
@@ -270,7 +272,7 @@ const SignUp = () => {
                 required
               />
               <Image
-                src="/eye.svg" // Assuming eye.svg is in your public folder
+                src="/eye.svg"
                 width={20}
                 height={20}
                 alt="Eye icon"
@@ -281,7 +283,7 @@ const SignUp = () => {
             {/* Confirm Password */}
             <div className="relative">
               <input
-                type="password" // Use type="password" for confirm password
+                type="password"
                 placeholder="Confirm password"
                 className="w-full border border-gray-300 rounded-xl py-4 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 value={confirmPassword}
@@ -297,7 +299,7 @@ const SignUp = () => {
               />
             </div>
 
-            {/* Role Selection Dropdown - Adjusted to w-full */}
+            {/* Role Selection Dropdown */}
             <div>
               <select
                 className="w-full border border-gray-300 rounded-xl py-4 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -308,7 +310,6 @@ const SignUp = () => {
                 <option value="">-- Select your role --</option>
                 <option value="user">User</option>
                 <option value="installer">Installer</option>{" "}
-                {/* Changed "Admin" to "Installer" to match common roles */}
               </select>
             </div>
 
@@ -334,9 +335,9 @@ const SignUp = () => {
 
             {/* Sign Up Button */}
             <button
-              type="submit" // This is the submit button for the form
+              type="submit"
               className="w-full bg-orange-500 text-white font-semibold py-4 rounded-xl hover:bg-orange-600 transition-colors"
-              disabled={loading} // Disable button while loading
+              disabled={loading}
             >
               {loading ? "Signing Up..." : "Sign Up"}
             </button>
@@ -345,7 +346,7 @@ const SignUp = () => {
           <p className="text-center text-gray-700 mt-6">
             You have an account?{" "}
             <Link
-              href="/SignIn" // Assuming your SignIn page path
+              href="/SignIn"
               className="text-orange-500 font-bold hover:underline"
             >
               Log in

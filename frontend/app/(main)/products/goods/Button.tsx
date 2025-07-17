@@ -1,12 +1,14 @@
 "use client";
-import React, { MouseEvent } from 'react'; 
+import Image from "next/image";
+
+import React, { MouseEvent } from "react";
 type Buttonprops = {
   type: "button" | "submit";
   title: string;
   icon?: string;
   variant: string;
   full?: boolean;
-  onClick?:(event:MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 const Button = ({ type, title, icon, variant, full, onClick }: Buttonprops) => {
@@ -18,7 +20,7 @@ const Button = ({ type, title, icon, variant, full, onClick }: Buttonprops) => {
       type={type}
       onClick={onClick}
     >
-      {icon && <img src={icon} alt={title} width={24} height={24} />}
+      {icon && <Image src={icon} alt={title} width={24} height={24} />}
       <label className="bold-16 whitespace-nowrap">{title}</label>
     </button>
   );

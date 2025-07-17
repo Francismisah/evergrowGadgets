@@ -2,13 +2,14 @@
 import Image from "next/image";
 import Button from "./Button";
 import { PEOPLE_URL } from "@/constants";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react"; // Import useCallback
 
 interface Slide {
   id: number;
   src: string;
   alt: string;
 }
+
 const Hero = () => {
   const slides: Slide[] = [
     {
@@ -37,37 +38,55 @@ const Hero = () => {
   const slideIntervalRef = useRef<number | null>(null);
   const slideDuration: number = 10000;
 
-  const showSlide = (index: number): void => {
+  const showSlide = useCallback((index: number): void => {
     setCurrentSlide((index + slides.length) % slides.length);
-  };
+  }, [slides.length]); // `slides.length` is constant, so this is safe
 
-  const nextSlide = (): void => {
+  const nextSlide = useCallback((): void => {
     showSlide(currentSlide + 1);
-  };
+  }, [currentSlide, showSlide]); // `showSlide` is now memoized
 
-  const prevSlide = (): void => {
-    showSlide(currentSlide - 1);
-  };
+  // Removed 'prevSlide' as it was unused and not called anywhere in the UI.
+  // If you intend to add a 'Previous' button, uncomment this function
+  // and add a button in the JSX that calls it.
+  // const prevSlide = useCallback((): void => {
+  //   showSlide(currentSlide - 1);
+  // }, [currentSlide, showSlide]);
 
-  const startAutoSlide = (): void => {
-    stopAutoSlide();
-    slideIntervalRef.current = window.setInterval(nextSlide, slideDuration);
-  };
-
-  const stopAutoSlide = (): void => {
+  const stopAutoSlide = useCallback((): void => {
     if (slideIntervalRef.current !== null) {
       clearInterval(slideIntervalRef.current);
       slideIntervalRef.current = null;
     }
-  };
+  }, []); // No dependencies, as it only interacts with the ref
+
+  const startAutoSlide = useCallback((): void => {
+    stopAutoSlide();
+    // Use `window.setInterval` directly as `setInterval` from Node.js is not type-compatible for browser environment
+    slideIntervalRef.current = window.setInterval(nextSlide, slideDuration);
+  }, [nextSlide, stopAutoSlide, slideDuration]); // Dependencies for useCallback
 
   useEffect(() => {
-    startAutoSlide();
+    startAutoSlide(); // Initial start of auto-slide
 
     return () => {
-      stopAutoSlide();
+      stopAutoSlide(); // Cleanup function to stop auto-slide on unmount
     };
+  }, [startAutoSlide]); // Only `startAutoSlide` as a dependency
+
+  // Effect to restart auto-slide when currentSlide changes due to manual interaction
+  useEffect(() => {
+    // This useEffect handles restarting the timer *only* when the slide
+    // changes due to clicking a dot. The main auto-slide is handled by the
+    // first useEffect.
+    const timer = setTimeout(() => {
+      startAutoSlide();
+    }, 500); // Small delay to allow manual interaction to complete
+
+    return () => clearTimeout(timer);
   }, [currentSlide, startAutoSlide]);
+
+
   return (
     <section
       className=" md:max-container  lg:max-container mb-12 lg:pt-16
@@ -117,7 +136,7 @@ const Hero = () => {
         </div>
         <div className="relative  flex flex-1 items-start">
           <div className="">
-            <div className="bg-transparent md:bg-transparent  lg:bg-red-800 bg-center bg-cover relative   mt-16 px-[10rem] md:px-72 md:py-52 lg:px-72 py-36 lg:py-52 rounded-full text-left  " />
+            <div className="bg-transparent md:bg-transparent  lg:bg-red-800 bg-center bg-cover relative   mt-16 px-[10rem] md:px-72 md:py-52 lg:px-72 py-36 lg:py-52 rounded-full text-left   " />
             <div className="absolute  -top-5  right-80 hidden lg:block md:block ">
               <p className="text-white border-2 border-red-800 shadow-sm bg-red-950 px-4 py-4 my-2  rounded-b-lg rounded-tr-md regular-12">
                 {" "}
@@ -167,7 +186,8 @@ const Hero = () => {
                   onClick={() => {
                     stopAutoSlide(); // Stop auto-slide when a dot is clicked
                     showSlide(index);
-                    startAutoSlide(); // Restart auto-slide after manual interaction
+                    // The auto-slide is restarted by the useEffect that watches currentSlide
+                    // No need to call startAutoSlide() directly here.
                   }}
                 ></span>
               ))}

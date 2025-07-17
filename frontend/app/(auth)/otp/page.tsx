@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react"; // Explicitly import React for React.FormEvent
 
 // You'll need a GraphQL mutation for OTP verification as well
 const VERIFY_OTP_MUTATION = `
@@ -80,43 +81,52 @@ const OTPVerificationPage = () => {
 
       const result = await response.json();
 
+      // Fix for 'Unexpected any' on line 86 (now potentially different line due to formatting)
+      // Define a type for GraphQL errors for better type safety
+      interface GraphQLError {
+        message: string;
+        locations?: { line: number; column: number }[];
+        path?: string[];
+        extensions?: Record<string, any>; // Use a more specific type if you know the structure
+      }
+
       if (result.errors) {
         console.error("GraphQL OTP Verification Error:", result.errors);
+        // Explicitly cast result.errors to an array of GraphQLError
         const errorMessageText =
-          result.errors.map((err: any) => err.message).join(", ") ||
-          "OTP verification failed.";
+          (result.errors as GraphQLError[])
+            .map((err: GraphQLError) => err.message) // Use GraphQLError for 'err'
+            .join(", ") || "OTP verification failed.";
         setMessage({
           text: `Verification failed: ${errorMessageText}`,
           type: "error",
         });
       } else if (
         result.data &&
-        result.data.verifyOtp &&
-        result.data.verifyOtp.token
+        result.data.verifyEmail && // Changed from result.data.verifyOtp to result.data.verifyEmail based on your mutation name
+        result.data.verifyEmail.token
       ) {
         setMessage({
           text:
-            result.data.verifyOtp.message || "Account verified successfully!",
+            result.data.verifyEmail.message || "Account verified successfully!", // Changed verifyOtp to verifyEmail
           type: "success",
         });
 
+        // Fix for 'Unexpected any' on line 129 (now potentially different line due to formatting)
+        // You would apply a specific type here if 'result.data.verifyOtp' (now verifyEmail) had a complex structure.
+        // For 'token' and 'message', string types are implicit, so 'any' is not needed here if 'result.data' is implicitly typed.
+        // The previous 'any' on line 129 was likely referring to the 'result.errors' map function 'err: any'
+        // which has been addressed above with GraphQLError.
+
         // ⭐ Store the received authentication token ⭐
-        localStorage.setItem("authToken", result.data.verifyOtp.token);
-        // If your verifyOtp also returns the user's role, store it here as well
-        // localStorage.setItem("userRole", result.data.verifyOtp.user.role);
+        localStorage.setItem("authToken", result.data.verifyEmail.token);
+        // If your verifyEmail also returns the user's role, store it here as well
+        // localStorage.setItem("userRole", result.data.verifyEmail.user.role);
 
         // Clear the userEmailForOtp from localStorage as it's no longer needed
         localStorage.removeItem("userEmailForOtp");
 
-        // Redirect to the appropriate dashboard based on the user's role
-        // You'll need to fetch the role or have it returned by verifyOtp mutation
-        // For simplicity here, let's assume you'd fetch user data or it's implicitly known
         setTimeout(() => {
-          // Example: Redirect to a general dashboard or based on stored role
-          // If you stored the role after signup or if verifyOtp returns it:
-          // const userRole = localStorage.getItem("userRole");
-          // if (userRole === "installer") { router.push("/installer-dashboard"); }
-          // else { router.push("/user-dashboard"); }
           router.push("/dashboard"); // Or '/user-dashboard', '/installer-dashboard'
         }, 2000);
       } else {
@@ -126,13 +136,16 @@ const OTPVerificationPage = () => {
           type: "error",
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      // Use 'unknown' for catch block errors
       console.error("Network or parsing error during OTP verification:", error);
+      let errorMessage = "Please check your internet connection and try again.";
+      if (error instanceof Error) {
+        // Refine type if it's an Error instance
+        errorMessage = error.message;
+      }
       setMessage({
-        text: `An error occurred: ${
-          error.message ||
-          "Please check your internet connection and try again."
-        }`,
+        text: `An error occurred: ${errorMessage}`,
         type: "error",
       });
     } finally {
@@ -156,7 +169,7 @@ const OTPVerificationPage = () => {
           Verify Your Account
         </h1>
         <p className="text-gray-600 mb-6 text-center">
-          We've sent a 6-digit code to{" "}
+          We&apos;ve sent a 6-digit code to {/* Fix for unescaped apostrophe */}
           <span className="font-semibold text-orange-500">{email}</span>. Please
           enter it below.
         </p>
@@ -201,7 +214,7 @@ const OTPVerificationPage = () => {
         </form>
 
         <p className="text-center text-gray-700 mt-6 text-sm">
-          Didn't receive the code?{" "}
+          Didn&apos;t receive the code? {/* Fix for unescaped apostrophe */}
           <Link href="#" className="text-orange-500 font-bold hover:underline">
             Resend Code
           </Link>

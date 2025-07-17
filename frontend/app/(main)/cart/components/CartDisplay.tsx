@@ -5,7 +5,6 @@ import React from "react";
 import CartItem from "./CartItem";
 
 
-
 const CartDisplay: React.FC = () => {
   const {
     cart,
@@ -15,8 +14,12 @@ const CartDisplay: React.FC = () => {
     getCartItemCount,
   } = useCart();
 
-  // Disable button if cart is empty
-  const isCheckoutDisabled = cart.length === 0;
+  // The variable 'isCheckoutDisabled' was assigned a value but never used
+  // within this component. To resolve the error, it has been removed.
+  // If a checkout button exists in a parent component that needs to be
+  // disabled based on the cart's emptiness, that logic should be handled
+  // in the parent component, potentially by passing getCartItemCount()
+  // or cart.length to it.
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto my-8">
