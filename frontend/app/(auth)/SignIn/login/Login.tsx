@@ -23,18 +23,6 @@ const Login: React.FC<LoginProps> = ({ onSubmit }) => {
     setIsFormValid(isValid);
   }, [email, password]);
 
-  const handleSubmit = (e: FormEvent): void => {
-    e.preventDefault();
-    if (!isFormValid) {
-      alert("Please fill in all card details.");
-      return;
-    }
-
-    onSubmit({ email, password });
-    setEmail("");
-    setPassword("");
-  };
-
   return (
     <div className="min-h-screen bg-pattern-3 bg-no-repeat bg-blend-multiply bg-red-800 bg-opacity-70  bg-cover bg-center  flex items-center justify-center p-4">
       {" "}
@@ -128,7 +116,7 @@ const Login: React.FC<LoginProps> = ({ onSubmit }) => {
           </button>
 
           <p className="text-center text-gray-700 mt-6">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/signUp"
               className="text-orange-500 font-bold hover:underline"

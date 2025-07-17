@@ -67,11 +67,12 @@ const Hero = () => {
     return () => {
       stopAutoSlide();
     };
-  }, [currentSlide]);
+  }, [currentSlide, startAutoSlide]);
   return (
     <section
       className=" md:max-container  lg:max-container mb-12 lg:pt-16
-    "  >
+    "
+    >
       <div
         className="rounded-b-lg lg:rounded-5xl   padding-container flex-col-reverse md:flex-col flex 
     gap-20 py-12 pb-32 bg-red-950 bg-cover bg-center md:gap-28 lg:py-20 max-container
