@@ -1,10 +1,40 @@
 "use client";
-import React from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Button from "./Button";
 import Image from "next/image";
 import Link from "next/link";
 
-const Login = () => {
+interface LoginDetails {
+  email: string;
+  password: string;
+}
+
+interface LoginProps {
+  onSubmit: (details: LoginDetails) => void;
+}
+
+const Login: React.FC<LoginProps> = ({ onSubmit }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+
+  useEffect(() => {
+    const isValid = email.trim() !== "" && password.trim() !== "";
+    setIsFormValid(isValid);
+  }, [email, password]);
+
+  const handleSubmit = (e: FormEvent): void => {
+    e.preventDefault();
+    if (!isFormValid) {
+      alert("Please fill in all card details.");
+      return;
+    }
+
+    onSubmit({ email, password });
+    setEmail("");
+    setPassword("");
+  };
+
   return (
     <div className="min-h-screen bg-pattern-3 bg-no-repeat bg-blend-multiply bg-red-800 bg-opacity-70  bg-cover bg-center  flex items-center justify-center p-4">
       {" "}
@@ -17,9 +47,6 @@ const Login = () => {
           </Link>
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Welcome back!
-            <span role="img" aria-label="waving hand">
-              👋
-            </span>
           </h1>
           <p className="text-gray-600 mb-6">Please enter your details.</p>
 
@@ -46,7 +73,10 @@ const Login = () => {
             <input
               type="email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full border border-gray-300 rounded-xl py-4 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              required
             />
             {/* Replace with actual envelope SVG icon */}
             <Image
@@ -62,6 +92,8 @@ const Login = () => {
             <input
               type="password"
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full border border-gray-300 rounded-xl py-4 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
             {/* Replace with actual lock SVG icon */}
@@ -84,7 +116,14 @@ const Login = () => {
             </a>
           </div>
 
-          <button className="w-full bg-orange-500 text-white font-semibold py-4 rounded-xl hover:bg-orange-600 transition-colors">
+          <button
+            disabled={!isFormValid}
+            className={`w-full  text-white font-semibold py-4 rounded-xl  transition-colors ${
+              isFormValid
+                ? "bg-orange-600 text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+          >
             Log in
           </button>
 

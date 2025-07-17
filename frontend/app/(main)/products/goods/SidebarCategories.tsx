@@ -72,6 +72,7 @@ const SidebarCategories: React.FC<SidebarProps> = ({
   };
 
   return (
+     
     <section className="flex flex-row my-12 max-container mx-4 relative">
       <aside
         className={`hidden md:hidden lg:block  padding-container ${

@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
 import { useState, useEffect } from "react"; // Import useEffect
-import Button from "./Button";
+import ProductCard from "./ProductCard";
+
 
 interface Product {
   id: number;
@@ -11,44 +11,7 @@ interface Product {
   review: string;
 }
 
-interface ProductCardProps {
-  product: Product;
-}
 
-const ProductCard = ({ product }: ProductCardProps) => {
-  return (
-    <div className=" m-4  flexCenter items-left object-left  justify-left flex-col  text-left border-none rounded-lg">
-      <div className="py-16 px-10 bg-gray-200  rounded-xl hover:shadow-sm hover:shadow-gray-100  ">
-        <Image src={product.img} width={150} height={150} alt={""} />
-      </div>
-      <div className="text-left my-2">
-        <h3 className="bold-16 lg:bold-20 text-black my-2">{product.name}</h3>
-        <div className="flex flex-row gap-24 my-2">
-          <p className="medium-14 flexCenter  text-gray-500">
-            <Image
-              src="/star.png"
-              width={200}
-              height={150}
-              alt={""}
-              className="w-4"
-            />
-            {product.review}
-          </p>
-          <p className="bold-16 lg:bold-18 text-black ">${product.price}</p>
-        </div>
-      </div>
-      <div className="flex flex-col sm:flex-row lg:flex-row md:flex-row gap-8 my-2">
-        <Button
-          type="button"
-          title="Add to Cart"
-          icon="/shopping.svg"
-          variant="btn_green1"
-        />
-        <Button type="button" title="Buy Now" icon="" variant="btn_green2" />
-      </div>
-    </div>
-  );
-};
 
 const products: Product[] = [
   {
@@ -116,7 +79,7 @@ const products: Product[] = [
   },
 ];
 
-const UsedProducts = () => {
+const NewProducts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   // State to store the current window width
   const [windowWidth, setWindowWidth] = useState(0);
@@ -210,4 +173,4 @@ const UsedProducts = () => {
   );
 };
 
-export default UsedProducts;
+export default NewProducts;

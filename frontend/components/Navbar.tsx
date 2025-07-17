@@ -40,22 +40,30 @@ const Navbar = () => {
             />
           </Link>
           {/* user area */}
-
-          <Image
-            src="users1.svg"
-            alt="menu"
-            width={50}
-            height={50}
-            className="cursor-pointer  rounded-full border-2 p-3 border-gray-500"
-          />
-
+          <Link href="/accounts">
+            <Image
+              src="users1.svg"
+              alt="menu"
+              width={50}
+              height={50}
+              className="cursor-pointer   rounded-full border-2 p-3 border-gray-500"
+            />
+          </Link>
+          <Link href="/cart" className="hidden">
+            <Button
+              type="button"
+              title="Cart"
+              icon="/whitecart.svg"
+              variant="btn_green  "
+            />
+          </Link>
           {/* mobile menu */}
           <section className=" relative">
             <button onClick={handleCategorySelection}>
               {categoriesContent ? (
                 <div className="flexCenter gap-4 flex-row-reverse lg:hidden">
                   <Image
-                    src="/menu.svg"
+                    src="/menus.svg"
                     alt="menu"
                     width={50}
                     height={50}
@@ -66,7 +74,7 @@ const Navbar = () => {
                 <div className="flexCenter gap-4 flex-row-reverse lg:hidden">
                   {" "}
                   <Image
-                    src="/menu.svg"
+                    src="/menus.svg"
                     alt="menu"
                     width={50}
                     height={50}
